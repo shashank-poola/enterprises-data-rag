@@ -32,11 +32,15 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    from rag_agent.api.routes.analytics import router as analytics_router
+    from rag_agent.api.routes.auth import router as auth_router
     from rag_agent.api.routes.documents import router as documents_router
     from rag_agent.api.routes.query import router as query_router
 
+    app.include_router(auth_router, prefix="/api/v1")
     app.include_router(documents_router, prefix="/api/v1")
     app.include_router(query_router, prefix="/api/v1")
+    app.include_router(analytics_router, prefix="/api/v1")
 
     @app.get("/health", tags=["ops"])
     def health():
